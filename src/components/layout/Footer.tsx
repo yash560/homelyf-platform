@@ -161,25 +161,35 @@ export default function Footer() {
             </ul>
           </div>
 
-          {/* Column 4: Partner & Compliance */}
+          {/* Column 4: Partner, Portals & Compliance */}
           <div>
             <div className="text-sm font-bold uppercase tracking-wider text-white mb-4">
-              Partner & Legal
+              Portals & Compliance
             </div>
             <ul className="space-y-2 text-xs">
               <li>
-                <Link href="/plans" className="hover:text-emerald-400 transition-colors font-medium text-emerald-300">
+                <Link href="/portal/user" className="hover:text-emerald-400 transition-colors">
+                  👤 Buyer & Tenant Portal
+                </Link>
+              </li>
+              <li>
+                <Link href="/portal/agent" className="hover:text-emerald-400 transition-colors">
+                  🏢 Broker / Partner Console
+                </Link>
+              </li>
+              <li>
+                <Link href="/admin" className="hover:text-emerald-400 transition-colors">
+                  🛡️ Master Admin Console
+                </Link>
+              </li>
+              <li>
+                <Link href="/policy" className="hover:text-emerald-400 transition-colors text-emerald-300 font-medium">
+                  📜 Policy & Legal Center
+                </Link>
+              </li>
+              <li>
+                <Link href="/plans" className="hover:text-emerald-400 transition-colors">
                   Listing Pricing & Plans
-                </Link>
-              </li>
-              <li>
-                <Link href="/agents" className="hover:text-emerald-400 transition-colors">
-                  Verified Agent Network
-                </Link>
-              </li>
-              <li>
-                <Link href="/contact" className="hover:text-emerald-400 transition-colors">
-                  Become a Channel Partner
                 </Link>
               </li>
               <li>
@@ -191,11 +201,6 @@ export default function Footer() {
                 >
                   MP-RERA Official Portal <ExternalLink className="w-3 h-3 ml-1" />
                 </a>
-              </li>
-              <li>
-                <Link href="/contact" className="hover:text-emerald-400 transition-colors">
-                  Privacy Policy & Terms
-                </Link>
               </li>
             </ul>
           </div>
