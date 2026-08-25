@@ -2,11 +2,11 @@
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { usePathname, useRouter } from 'next/navigation';
+import { usePathname } from 'next/navigation';
 import { 
   Building2, 
   Search, 
-  PlusCircle, 
+  Plus, 
   MapPin, 
   Menu, 
   X, 
@@ -20,7 +20,6 @@ import {
   User,
   Briefcase,
   Lock,
-  ArrowRight,
   TrendingUp,
   FileText,
   Image as ImageIcon,
@@ -42,22 +41,17 @@ export default function Navbar({ onOpenSearch, onOpenPostProperty }: NavbarProps
   const [selectedCity, setSelectedCity] = useState('Bhopal');
   const [cityDropdownOpen, setCityDropdownOpen] = useState(false);
   
-  // Mega menu hover/click states
+  // Mega menu dropdown state
   const [activeMenu, setActiveMenu] = useState<string | null>(null);
   const [portalDropdownOpen, setPortalDropdownOpen] = useState(false);
   const [authModalOpen, setAuthModalOpen] = useState(false);
   const [authRole, setAuthRole] = useState<AuthRole>('user');
 
   const pathname = usePathname();
-  const router = useRouter();
 
   useEffect(() => {
     const handleScroll = () => {
-      if (window.scrollY > 20) {
-        setIsScrolled(true);
-      } else {
-        setIsScrolled(false);
-      }
+      setIsScrolled(window.scrollY > 15);
     };
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
@@ -75,52 +69,41 @@ export default function Navbar({ onOpenSearch, onOpenPostProperty }: NavbarProps
   return (
     <>
       <header
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-200 ${
           isScrolled
-            ? 'bg-white/95 dark:bg-gray-900/95 backdrop-blur-md shadow-md border-b border-gray-200/60 dark:border-gray-800/60 py-2.5'
-            : 'bg-white/85 dark:bg-gray-950/85 backdrop-blur-md border-b border-gray-200/40 dark:border-gray-800/40 py-3.5'
+            ? 'bg-white/95 dark:bg-gray-900/95 backdrop-blur-md shadow-sm border-b border-gray-200/80 dark:border-gray-800/80 h-16'
+            : 'bg-white/90 dark:bg-gray-950/90 backdrop-blur-md border-b border-gray-200/50 dark:border-gray-800/50 h-16'
         }`}
       >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between">
-            {/* Logo & City Selector */}
-            <div className="flex items-center space-x-3.5">
-              <Link href="/" className="flex items-center space-x-2.5 group">
-                <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-gradient-to-tr from-emerald-600 to-teal-400 flex items-center justify-center text-white shadow-lg shadow-emerald-500/20 group-hover:scale-105 transition-transform">
-                  <Building2 className="w-5 h-5" />
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-full">
+          <div className="flex items-center justify-between h-full">
+            {/* Left: Brand Logo & Single-Word City Selector */}
+            <div className="flex items-center space-x-3 shrink-0">
+              <Link href="/" className="flex items-center space-x-2 group">
+                <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-emerald-600 to-teal-400 flex items-center justify-center text-white shadow-md shadow-emerald-500/20 group-hover:scale-105 transition-transform">
+                  <Building2 className="w-4 h-4" />
                 </div>
-                <div className="flex flex-col">
-                  <span className="text-lg sm:text-xl font-extrabold tracking-tight text-gray-900 dark:text-white flex items-center">
-                    HOMELYF<span className="text-emerald-500">.IN</span>
-                    <span className="text-[9px] ml-1.5 font-bold uppercase tracking-wider px-1.5 py-0.5 rounded-md bg-emerald-100 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800/50">
-                      PRO
-                    </span>
-                  </span>
-                  <span className="text-[9px] font-medium text-gray-400 -mt-1 hidden sm:block">
-                    Verified Real Estate Marketplace
-                  </span>
-                </div>
+                <span className="text-lg font-black tracking-tight text-gray-900 dark:text-white flex items-center whitespace-nowrap">
+                  HOMELYF<span className="text-emerald-500">.IN</span>
+                </span>
               </Link>
 
-              {/* City Selector */}
+              {/* City Pill */}
               <div className="relative hidden md:block">
                 <button
                   onClick={() => setCityDropdownOpen(!cityDropdownOpen)}
-                  className="flex items-center space-x-1.5 px-3 py-1.5 rounded-full bg-gray-100/90 dark:bg-gray-800/90 border border-gray-200 dark:border-gray-700 text-xs font-bold text-gray-700 dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors cursor-pointer"
+                  className="flex items-center space-x-1 px-2.5 py-1 rounded-lg bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 text-xs font-bold text-gray-700 dark:text-gray-300 transition-colors cursor-pointer whitespace-nowrap"
                 >
-                  <MapPin className="w-3.5 h-3.5 text-emerald-500" />
+                  <MapPin className="w-3 h-3 text-emerald-500 shrink-0" />
                   <span>{selectedCity}</span>
-                  <ChevronDown className="w-3 h-3 text-gray-400" />
+                  <ChevronDown className="w-3 h-3 text-gray-400 shrink-0" />
                 </button>
 
                 {cityDropdownOpen && (
                   <div
-                    className="absolute left-0 mt-2 w-44 rounded-2xl glass-dropdown shadow-xl py-1 z-50 border border-gray-200 dark:border-gray-800 animate-in fade-in zoom-in-95 duration-100"
+                    className="absolute left-0 mt-2 w-40 rounded-2xl glass-dropdown shadow-xl py-1 z-50 border border-gray-200 dark:border-gray-800 animate-in fade-in zoom-in-95 duration-100"
                     onMouseLeave={() => setCityDropdownOpen(false)}
                   >
-                    <div className="px-3 py-1.5 text-[10px] font-bold uppercase text-gray-400 border-b border-gray-100 dark:border-gray-800">
-                      Select Market Hub
-                    </div>
                     {cities.map((city) => (
                       <button
                         key={city}
@@ -128,14 +111,14 @@ export default function Navbar({ onOpenSearch, onOpenPostProperty }: NavbarProps
                           setSelectedCity(city);
                           setCityDropdownOpen(false);
                         }}
-                        className={`w-full text-left px-3.5 py-2 text-xs font-medium flex items-center justify-between hover:bg-emerald-50 dark:hover:bg-emerald-950/40 transition-colors cursor-pointer ${
+                        className={`w-full text-left px-3 py-1.5 text-xs font-medium flex items-center justify-between hover:bg-emerald-50 dark:hover:bg-emerald-950/40 cursor-pointer ${
                           selectedCity === city
-                            ? 'text-emerald-600 dark:text-emerald-400 font-bold bg-emerald-50/50'
+                            ? 'text-emerald-600 dark:text-emerald-400 font-bold'
                             : 'text-gray-700 dark:text-gray-300'
                         }`}
                       >
                         <span>{city}</span>
-                        {selectedCity === city && <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500" />}
+                        {selectedCity === city && <CheckCircle2 className="w-3 h-3 text-emerald-500" />}
                       </button>
                     ))}
                   </div>
@@ -143,11 +126,11 @@ export default function Navbar({ onOpenSearch, onOpenPostProperty }: NavbarProps
               </div>
             </div>
 
-            {/* Desktop Mega Menu Navigation */}
+            {/* Middle: Clean Single-Word Desktop Nav */}
             <nav className="hidden lg:flex items-center space-x-1">
               <Link
                 href="/"
-                className={`px-3 py-2 rounded-xl text-xs font-bold transition-colors ${
+                className={`px-3 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap transition-colors ${
                   pathname === '/'
                     ? 'text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/50'
                     : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800'
@@ -156,14 +139,14 @@ export default function Navbar({ onOpenSearch, onOpenPostProperty }: NavbarProps
                 Home
               </Link>
 
-              {/* 1. Explore Properties Mega Menu */}
+              {/* Properties Dropdown */}
               <div 
                 className="relative"
                 onMouseEnter={() => setActiveMenu('properties')}
                 onMouseLeave={() => setActiveMenu(null)}
               >
                 <button
-                  className={`flex items-center space-x-1 px-3 py-2 rounded-xl text-xs font-bold transition-colors cursor-pointer ${
+                  className={`flex items-center space-x-1 px-3 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap transition-colors cursor-pointer ${
                     pathname.startsWith('/listing')
                       ? 'text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/50'
                       : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800'
@@ -174,130 +157,99 @@ export default function Navbar({ onOpenSearch, onOpenPostProperty }: NavbarProps
                 </button>
 
                 {activeMenu === 'properties' && (
-                  <div className="absolute left-0 mt-1 w-72 rounded-3xl glass-dropdown shadow-2xl p-3 z-50 border border-gray-200 dark:border-gray-800 animate-in fade-in zoom-in-95 duration-150">
-                    <div className="px-2 py-1 text-[10px] font-extrabold uppercase tracking-wider text-gray-400 border-b border-gray-100 dark:border-gray-800 mb-1.5">
-                      Explore Listings
-                    </div>
+                  <div className="absolute left-0 mt-1 w-64 rounded-2xl glass-dropdown shadow-xl p-2 z-50 border border-gray-200 dark:border-gray-800 animate-in fade-in zoom-in-95 duration-100">
                     <Link
                       href="/listing"
-                      className="flex items-center space-x-2.5 p-2 rounded-xl hover:bg-emerald-50 dark:hover:bg-emerald-950/40 text-xs font-semibold text-gray-800 dark:text-gray-200 group"
+                      className="flex items-center space-x-2 p-2 rounded-xl hover:bg-emerald-50 dark:hover:bg-emerald-950/40 text-xs font-bold text-gray-800 dark:text-gray-200"
                     >
                       <Building2 className="w-4 h-4 text-emerald-500" />
-                      <div>
-                        <div className="group-hover:text-emerald-600 dark:group-hover:text-emerald-400 font-bold">All Verified Listings</div>
-                        <div className="text-[10px] text-gray-400">8,000+ properties across India</div>
-                      </div>
+                      <span>All Listings</span>
                     </Link>
                     <Link
                       href="/listing?purpose=buy"
-                      className="flex items-center space-x-2.5 p-2 rounded-xl hover:bg-emerald-50 dark:hover:bg-emerald-950/40 text-xs font-semibold text-gray-800 dark:text-gray-200 group"
+                      className="flex items-center space-x-2 p-2 rounded-xl hover:bg-emerald-50 dark:hover:bg-emerald-950/40 text-xs font-medium text-gray-700 dark:text-gray-300"
                     >
                       <Sparkles className="w-4 h-4 text-emerald-500" />
-                      <div>
-                        <div className="group-hover:text-emerald-600 dark:group-hover:text-emerald-400">Buy Residential</div>
-                        <div className="text-[10px] text-gray-400">Apartments, Flats & Duplexes</div>
-                      </div>
+                      <span>Buy Residential</span>
                     </Link>
                     <Link
                       href="/listing?purpose=rent"
-                      className="flex items-center space-x-2.5 p-2 rounded-xl hover:bg-emerald-50 dark:hover:bg-emerald-950/40 text-xs font-semibold text-gray-800 dark:text-gray-200 group"
+                      className="flex items-center space-x-2 p-2 rounded-xl hover:bg-emerald-50 dark:hover:bg-emerald-950/40 text-xs font-medium text-gray-700 dark:text-gray-300"
                     >
                       <Building2 className="w-4 h-4 text-emerald-500" />
-                      <div>
-                        <div className="group-hover:text-emerald-600 dark:group-hover:text-emerald-400">Rentals (Zero Deposit/Brokerage)</div>
-                        <div className="text-[10px] text-gray-400">Furnished & Semi-Furnished</div>
-                      </div>
+                      <span>Rent Homes</span>
                     </Link>
                     <Link
                       href="/listing?type=villa"
-                      className="flex items-center space-x-2.5 p-2 rounded-xl hover:bg-emerald-50 dark:hover:bg-emerald-950/40 text-xs font-semibold text-gray-800 dark:text-gray-200 group"
+                      className="flex items-center space-x-2 p-2 rounded-xl hover:bg-emerald-50 dark:hover:bg-emerald-950/40 text-xs font-medium text-gray-700 dark:text-gray-300"
                     >
                       <Building2 className="w-4 h-4 text-emerald-500" />
-                      <div>
-                        <div className="group-hover:text-emerald-600 dark:group-hover:text-emerald-400">Villas & Luxury Penthouses</div>
-                        <div className="text-[10px] text-gray-400">Lakeview & Gated Townships</div>
-                      </div>
+                      <span>Villas & Penthouses</span>
                     </Link>
                   </div>
                 )}
               </div>
 
-              {/* 2. Invest & Calculators Mega Menu */}
+              {/* Invest Dropdown */}
               <div 
                 className="relative"
                 onMouseEnter={() => setActiveMenu('invest')}
                 onMouseLeave={() => setActiveMenu(null)}
               >
                 <button
-                  className={`flex items-center space-x-1 px-3 py-2 rounded-xl text-xs font-bold transition-colors cursor-pointer ${
+                  className={`flex items-center space-x-1 px-3 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap transition-colors cursor-pointer ${
                     pathname.startsWith('/invest-properties') || pathname.startsWith('/calculators')
                       ? 'text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/50'
                       : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800'
                   }`}
                 >
-                  <span>Invest & Tools</span>
-                  <span className="px-1.5 py-0.2 rounded text-[9px] font-black uppercase bg-emerald-500 text-white">9%+</span>
+                  <span>Invest</span>
                   <ChevronDown className="w-3 h-3 text-gray-400" />
                 </button>
 
                 {activeMenu === 'invest' && (
-                  <div className="absolute left-0 mt-1 w-80 rounded-3xl glass-dropdown shadow-2xl p-3 z-50 border border-gray-200 dark:border-gray-800 animate-in fade-in zoom-in-95 duration-150">
-                    <div className="px-2 py-1 text-[10px] font-extrabold uppercase tracking-wider text-gray-400 border-b border-gray-100 dark:border-gray-800 mb-1.5">
-                      Investment & Financial Engines
-                    </div>
+                  <div className="absolute left-0 mt-1 w-64 rounded-2xl glass-dropdown shadow-xl p-2 z-50 border border-gray-200 dark:border-gray-800 animate-in fade-in zoom-in-95 duration-100">
                     <Link
                       href="/invest-properties"
-                      className="flex items-center space-x-2.5 p-2 rounded-xl hover:bg-emerald-50 dark:hover:bg-emerald-950/40 text-xs font-semibold text-gray-800 dark:text-gray-200 group"
+                      className="flex items-center space-x-2 p-2 rounded-xl hover:bg-emerald-50 dark:hover:bg-emerald-950/40 text-xs font-bold text-gray-800 dark:text-gray-200"
                     >
                       <TrendingUp className="w-4 h-4 text-emerald-500" />
-                      <div>
-                        <div className="group-hover:text-emerald-600 dark:group-hover:text-emerald-400 font-bold">Pre-Leased Commercial Assets</div>
-                        <div className="text-[10px] text-gray-400">9% to 11.2% Net Monthly Yields</div>
-                      </div>
+                      <span>Commercial (9%+ Yield)</span>
                     </Link>
                     <Link
                       href="/calculators?tab=emi"
-                      className="flex items-center space-x-2.5 p-2 rounded-xl hover:bg-emerald-50 dark:hover:bg-emerald-950/40 text-xs font-semibold text-gray-800 dark:text-gray-200 group"
+                      className="flex items-center space-x-2 p-2 rounded-xl hover:bg-emerald-50 dark:hover:bg-emerald-950/40 text-xs font-medium text-gray-700 dark:text-gray-300"
                     >
                       <Calculator className="w-4 h-4 text-teal-500" />
-                      <div>
-                        <div className="group-hover:text-emerald-600 dark:group-hover:text-emerald-400">Home Loan EMI Calculator</div>
-                        <div className="text-[10px] text-gray-400">SBI, HDFC, ICICI Instant Rates</div>
-                      </div>
+                      <span>EMI Calculator</span>
                     </Link>
                     <Link
                       href="/calculators?tab=stamp"
-                      className="flex items-center space-x-2.5 p-2 rounded-xl hover:bg-emerald-50 dark:hover:bg-emerald-950/40 text-xs font-semibold text-gray-800 dark:text-gray-200 group"
+                      className="flex items-center space-x-2 p-2 rounded-xl hover:bg-emerald-50 dark:hover:bg-emerald-950/40 text-xs font-medium text-gray-700 dark:text-gray-300"
                     >
                       <FileText className="w-4 h-4 text-amber-500" />
-                      <div>
-                        <div className="group-hover:text-emerald-600 dark:group-hover:text-emerald-400">Stamp Duty Calculator (MP & India)</div>
-                        <div className="text-[10px] text-gray-400">Official registry fee estimation</div>
-                      </div>
+                      <span>Stamp Duty Calculator</span>
                     </Link>
                     <Link
                       href="/calculators?tab=roi"
-                      className="flex items-center space-x-2.5 p-2 rounded-xl hover:bg-emerald-50 dark:hover:bg-emerald-950/40 text-xs font-semibold text-gray-800 dark:text-gray-200 group"
+                      className="flex items-center space-x-2 p-2 rounded-xl hover:bg-emerald-50 dark:hover:bg-emerald-950/40 text-xs font-medium text-gray-700 dark:text-gray-300"
                     >
                       <TrendingUp className="w-4 h-4 text-emerald-500" />
-                      <div>
-                        <div className="group-hover:text-emerald-600 dark:group-hover:text-emerald-400">Rental Yield & ROI Estimator</div>
-                        <div className="text-[10px] text-gray-400">5-Year IRR & cash-flow models</div>
-                      </div>
+                      <span>Rental Yield Estimator</span>
                     </Link>
                   </div>
                 )}
               </div>
 
-              {/* 3. Network & Trust Mega Menu */}
+              {/* Company Dropdown */}
               <div 
                 className="relative"
-                onMouseEnter={() => setActiveMenu('network')}
+                onMouseEnter={() => setActiveMenu('company')}
                 onMouseLeave={() => setActiveMenu(null)}
               >
                 <button
-                  className={`flex items-center space-x-1 px-3 py-2 rounded-xl text-xs font-bold transition-colors cursor-pointer ${
-                    pathname === '/agents' || pathname === '/reviews' || pathname === '/gallery' || pathname === '/blogs' || pathname === '/plans'
+                  className={`flex items-center space-x-1 px-3 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap transition-colors cursor-pointer ${
+                    pathname === '/agents' || pathname === '/reviews' || pathname === '/gallery' || pathname === '/blogs' || pathname === '/plans' || pathname === '/contact'
                       ? 'text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/50'
                       : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800'
                   }`}
@@ -306,213 +258,168 @@ export default function Navbar({ onOpenSearch, onOpenPostProperty }: NavbarProps
                   <ChevronDown className="w-3 h-3 text-gray-400" />
                 </button>
 
-                {activeMenu === 'network' && (
-                  <div className="absolute left-0 mt-1 w-72 rounded-3xl glass-dropdown shadow-2xl p-3 z-50 border border-gray-200 dark:border-gray-800 animate-in fade-in zoom-in-95 duration-150">
+                {activeMenu === 'company' && (
+                  <div className="absolute left-0 mt-1 w-60 rounded-2xl glass-dropdown shadow-xl p-2 z-50 border border-gray-200 dark:border-gray-800 animate-in fade-in zoom-in-95 duration-100">
                     <Link
                       href="/agents"
-                      className="flex items-center space-x-2.5 p-2 rounded-xl hover:bg-emerald-50 dark:hover:bg-emerald-950/40 text-xs font-semibold text-gray-800 dark:text-gray-200 group"
+                      className="flex items-center space-x-2 p-2 rounded-xl hover:bg-emerald-50 dark:hover:bg-emerald-950/40 text-xs font-medium text-gray-700 dark:text-gray-300"
                     >
                       <ShieldCheck className="w-4 h-4 text-emerald-500" />
-                      <div>
-                        <div className="group-hover:text-emerald-600 dark:group-hover:text-emerald-400 font-bold">RERA Certified Agents</div>
-                        <div className="text-[10px] text-gray-400">Verified local property advisors</div>
-                      </div>
+                      <span>Verified Agents</span>
                     </Link>
                     <Link
                       href="/reviews"
-                      className="flex items-center space-x-2.5 p-2 rounded-xl hover:bg-emerald-50 dark:hover:bg-emerald-950/40 text-xs font-semibold text-gray-800 dark:text-gray-200 group"
+                      className="flex items-center space-x-2 p-2 rounded-xl hover:bg-emerald-50 dark:hover:bg-emerald-950/40 text-xs font-medium text-gray-700 dark:text-gray-300"
                     >
                       <Star className="w-4 h-4 text-amber-400 fill-amber-400" />
-                      <div>
-                        <div className="group-hover:text-emerald-600 dark:group-hover:text-emerald-400 font-bold">4.9★ Google Reviews</div>
-                        <div className="text-[10px] text-gray-400">840+ customer testimonials</div>
-                      </div>
+                      <span>4.9★ Reviews</span>
                     </Link>
                     <Link
                       href="/gallery"
-                      className="flex items-center space-x-2.5 p-2 rounded-xl hover:bg-emerald-50 dark:hover:bg-emerald-950/40 text-xs font-semibold text-gray-800 dark:text-gray-200 group"
+                      className="flex items-center space-x-2 p-2 rounded-xl hover:bg-emerald-50 dark:hover:bg-emerald-950/40 text-xs font-medium text-gray-700 dark:text-gray-300"
                     >
                       <ImageIcon className="w-4 h-4 text-emerald-500" />
-                      <div>
-                        <div className="group-hover:text-emerald-600 dark:group-hover:text-emerald-400 font-bold">Architectural Gallery</div>
-                        <div className="text-[10px] text-gray-400">HD photo walkthroughs</div>
-                      </div>
+                      <span>Photo Gallery</span>
                     </Link>
                     <Link
                       href="/blogs"
-                      className="flex items-center space-x-2.5 p-2 rounded-xl hover:bg-emerald-50 dark:hover:bg-emerald-950/40 text-xs font-semibold text-gray-800 dark:text-gray-200 group"
+                      className="flex items-center space-x-2 p-2 rounded-xl hover:bg-emerald-50 dark:hover:bg-emerald-950/40 text-xs font-medium text-gray-700 dark:text-gray-300"
                     >
                       <BookOpen className="w-4 h-4 text-emerald-500" />
-                      <div>
-                        <div className="group-hover:text-emerald-600 dark:group-hover:text-emerald-400 font-bold">PropTech Insights</div>
-                        <div className="text-[10px] text-gray-400">Market reports & buyer guides</div>
-                      </div>
+                      <span>Insights & Guides</span>
                     </Link>
                     <Link
                       href="/plans"
-                      className="flex items-center space-x-2.5 p-2 rounded-xl hover:bg-emerald-50 dark:hover:bg-emerald-950/40 text-xs font-semibold text-gray-800 dark:text-gray-200 group"
+                      className="flex items-center space-x-2 p-2 rounded-xl hover:bg-emerald-50 dark:hover:bg-emerald-950/40 text-xs font-medium text-gray-700 dark:text-gray-300"
                     >
                       <Zap className="w-4 h-4 text-emerald-500" />
-                      <div>
-                        <div className="group-hover:text-emerald-600 dark:group-hover:text-emerald-400 font-bold">Subscription & Pricing</div>
-                        <div className="text-[10px] text-gray-400">Owners, Brokers & Builders</div>
-                      </div>
+                      <span>Pricing Plans</span>
                     </Link>
                     <Link
                       href="/contact"
-                      className="flex items-center space-x-2.5 p-2 rounded-xl hover:bg-emerald-50 dark:hover:bg-emerald-950/40 text-xs font-semibold text-gray-800 dark:text-gray-200 group"
+                      className="flex items-center space-x-2 p-2 rounded-xl hover:bg-emerald-50 dark:hover:bg-emerald-950/40 text-xs font-medium text-gray-700 dark:text-gray-300"
                     >
                       <PhoneCall className="w-4 h-4 text-emerald-500" />
-                      <div>
-                        <div className="group-hover:text-emerald-600 dark:group-hover:text-emerald-400 font-bold">Bhopal Headquarters</div>
-                        <div className="text-[10px] text-gray-400">MP Nagar Zone-2 Office</div>
-                      </div>
+                      <span>Contact HQ</span>
                     </Link>
                   </div>
                 )}
               </div>
 
-              {/* 4. Policies Mega Menu */}
+              {/* Policies Dropdown */}
               <div 
                 className="relative"
-                onMouseEnter={() => setActiveMenu('policy')}
+                onMouseEnter={() => setActiveMenu('policies')}
                 onMouseLeave={() => setActiveMenu(null)}
               >
                 <button
-                  className={`flex items-center space-x-1 px-3 py-2 rounded-xl text-xs font-bold transition-colors cursor-pointer ${
+                  className={`flex items-center space-x-1 px-3 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap transition-colors cursor-pointer ${
                     pathname.startsWith('/policy')
                       ? 'text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/50'
                       : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800'
                   }`}
                 >
-                  <span>Policy & Legal</span>
+                  <span>Policies</span>
                   <ChevronDown className="w-3 h-3 text-gray-400" />
                 </button>
 
-                {activeMenu === 'policy' && (
-                  <div className="absolute left-0 mt-1 w-64 rounded-3xl glass-dropdown shadow-2xl p-3 z-50 border border-gray-200 dark:border-gray-800 animate-in fade-in zoom-in-95 duration-150">
+                {activeMenu === 'policies' && (
+                  <div className="absolute left-0 mt-1 w-60 rounded-2xl glass-dropdown shadow-xl p-2 z-50 border border-gray-200 dark:border-gray-800 animate-in fade-in zoom-in-95 duration-100">
                     <Link
                       href="/policy?tab=privacy"
-                      className="flex items-center space-x-2.5 p-2 rounded-xl hover:bg-emerald-50 dark:hover:bg-emerald-950/40 text-xs font-semibold text-gray-800 dark:text-gray-200 group"
+                      className="flex items-center space-x-2 p-2 rounded-xl hover:bg-emerald-50 dark:hover:bg-emerald-950/40 text-xs font-medium text-gray-700 dark:text-gray-300"
                     >
                       <Lock className="w-4 h-4 text-emerald-500" />
-                      <span className="group-hover:text-emerald-600 dark:group-hover:text-emerald-400 font-medium">Privacy Policy</span>
+                      <span>Privacy Policy</span>
                     </Link>
                     <Link
                       href="/policy?tab=terms"
-                      className="flex items-center space-x-2.5 p-2 rounded-xl hover:bg-emerald-50 dark:hover:bg-emerald-950/40 text-xs font-semibold text-gray-800 dark:text-gray-200 group"
+                      className="flex items-center space-x-2 p-2 rounded-xl hover:bg-emerald-50 dark:hover:bg-emerald-950/40 text-xs font-medium text-gray-700 dark:text-gray-300"
                     >
                       <FileText className="w-4 h-4 text-emerald-500" />
-                      <span className="group-hover:text-emerald-600 dark:group-hover:text-emerald-400 font-medium">Terms of Service</span>
+                      <span>Terms of Service</span>
                     </Link>
                     <Link
                       href="/policy?tab=rera"
-                      className="flex items-center space-x-2.5 p-2 rounded-xl hover:bg-emerald-50 dark:hover:bg-emerald-950/40 text-xs font-semibold text-gray-800 dark:text-gray-200 group"
+                      className="flex items-center space-x-2 p-2 rounded-xl hover:bg-emerald-50 dark:hover:bg-emerald-950/40 text-xs font-medium text-gray-700 dark:text-gray-300"
                     >
                       <ShieldCheck className="w-4 h-4 text-emerald-500" />
-                      <span className="group-hover:text-emerald-600 dark:group-hover:text-emerald-400 font-medium">MP-RERA Disclosures</span>
+                      <span>RERA Disclosures</span>
                     </Link>
                     <Link
                       href="/policy?tab=broker_code"
-                      className="flex items-center space-x-2.5 p-2 rounded-xl hover:bg-emerald-50 dark:hover:bg-emerald-950/40 text-xs font-semibold text-gray-800 dark:text-gray-200 group"
+                      className="flex items-center space-x-2 p-2 rounded-xl hover:bg-emerald-50 dark:hover:bg-emerald-950/40 text-xs font-medium text-gray-700 dark:text-gray-300"
                     >
                       <Scale className="w-4 h-4 text-emerald-500" />
-                      <span className="group-hover:text-emerald-600 dark:group-hover:text-emerald-400 font-medium">Broker Code of Conduct</span>
+                      <span>Broker Code</span>
                     </Link>
                   </div>
                 )}
               </div>
             </nav>
 
-            {/* Right-Hand Tools: Search, Theme, Login Panel, Post Free Property */}
-            <div className="flex items-center space-x-2 sm:space-x-2.5">
+            {/* Right: Clean Single-Line Controls */}
+            <div className="flex items-center space-x-2 shrink-0">
               {/* Search Pill */}
               <button
                 onClick={onOpenSearch}
-                aria-label="Search properties"
-                className="hidden xl:flex items-center space-x-2 px-3 py-1.5 rounded-xl bg-gray-100/80 dark:bg-gray-800/80 hover:bg-gray-200 dark:hover:bg-gray-700 border border-gray-200 dark:border-gray-700 text-gray-500 text-xs font-medium transition-colors cursor-pointer"
+                aria-label="Search"
+                className="hidden xl:flex items-center space-x-1.5 px-3 py-1.5 rounded-lg bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 border border-gray-200 dark:border-gray-700 text-gray-500 text-xs font-medium transition-colors cursor-pointer whitespace-nowrap"
               >
                 <Search className="w-3.5 h-3.5 text-emerald-500" />
-                <span>Search...</span>
-                <kbd className="px-1.5 py-0.5 text-[9px] font-semibold bg-white dark:bg-gray-900 border rounded">
-                  ⌘K
-                </kbd>
+                <span>Search</span>
+                <kbd className="px-1 py-0.2 text-[9px] bg-white dark:bg-gray-900 border rounded">⌘K</kbd>
               </button>
 
               {/* Theme Toggle */}
               <ThemeToggle />
 
-              {/* Tri-Role Sign In / Portal Selector Dropdown */}
+              {/* Portals Single-Word Dropdown */}
               <div className="relative">
                 <button
                   onClick={() => setPortalDropdownOpen(!portalDropdownOpen)}
-                  className="flex items-center space-x-1.5 px-3 py-2 rounded-xl bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 border border-gray-200 dark:border-gray-700 text-xs font-bold text-gray-800 dark:text-gray-200 transition-colors cursor-pointer"
+                  className="flex items-center space-x-1 px-3 py-1.5 rounded-lg bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 border border-gray-200 dark:border-gray-700 text-xs font-bold text-gray-800 dark:text-gray-200 transition-colors cursor-pointer whitespace-nowrap"
                 >
                   <User className="w-3.5 h-3.5 text-emerald-500" />
-                  <span>Portals & Login</span>
+                  <span>Portals</span>
                   <ChevronDown className="w-3 h-3 text-gray-400" />
                 </button>
 
                 {portalDropdownOpen && (
                   <div
-                    className="absolute right-0 mt-2 w-72 rounded-3xl glass-dropdown shadow-2xl p-3 z-50 border border-gray-200 dark:border-gray-800 animate-in fade-in zoom-in-95 duration-150"
+                    className="absolute right-0 mt-2 w-64 rounded-2xl glass-dropdown shadow-2xl p-2 z-50 border border-gray-200 dark:border-gray-800 animate-in fade-in zoom-in-95 duration-100"
                     onMouseLeave={() => setPortalDropdownOpen(false)}
                   >
-                    <div className="px-3 py-1.5 text-[10px] font-extrabold uppercase tracking-wider text-gray-400 border-b border-gray-100 dark:border-gray-800 mb-1.5">
-                      Select Access Level
-                    </div>
-
-                    {/* 1. Buyer Portal */}
                     <button
                       onClick={() => openAuthWithRole('user')}
-                      className="w-full flex items-start space-x-2.5 p-2.5 rounded-2xl hover:bg-emerald-50 dark:hover:bg-emerald-950/40 text-left transition-colors cursor-pointer group"
+                      className="w-full flex items-center space-x-2.5 p-2 rounded-xl hover:bg-emerald-50 dark:hover:bg-emerald-950/40 text-left transition-colors cursor-pointer"
                     >
-                      <div className="p-2 rounded-xl bg-emerald-100 dark:bg-emerald-950 text-emerald-600 shrink-0">
-                        <User className="w-4 h-4" />
-                      </div>
+                      <User className="w-4 h-4 text-emerald-600" />
                       <div>
-                        <div className="text-xs font-bold text-gray-900 dark:text-white group-hover:text-emerald-600">
-                          Buyer / Tenant Login
-                        </div>
-                        <div className="text-[10px] text-gray-400">
-                          Manage saved homes, site visits & loans
-                        </div>
+                        <div className="text-xs font-bold text-gray-900 dark:text-white">Buyer Portal</div>
+                        <div className="text-[10px] text-gray-400">Saved homes & tours</div>
                       </div>
                     </button>
 
-                    {/* 2. Broker Portal */}
                     <button
                       onClick={() => openAuthWithRole('agent')}
-                      className="w-full flex items-start space-x-2.5 p-2.5 rounded-2xl hover:bg-emerald-50 dark:hover:bg-emerald-950/40 text-left transition-colors cursor-pointer group"
+                      className="w-full flex items-center space-x-2.5 p-2 rounded-xl hover:bg-teal-50 dark:hover:bg-teal-950/40 text-left transition-colors cursor-pointer"
                     >
-                      <div className="p-2 rounded-xl bg-teal-100 dark:bg-teal-950 text-teal-600 shrink-0">
-                        <Briefcase className="w-4 h-4" />
-                      </div>
+                      <Briefcase className="w-4 h-4 text-teal-600" />
                       <div>
-                        <div className="text-xs font-bold text-gray-900 dark:text-white group-hover:text-teal-600">
-                          Broker / Agent Console
-                        </div>
-                        <div className="text-[10px] text-gray-400">
-                          Manage inventory, leads & WhatsApp CRM
-                        </div>
+                        <div className="text-xs font-bold text-gray-900 dark:text-white">Broker Hub</div>
+                        <div className="text-[10px] text-gray-400">Listings & Leads CRM</div>
                       </div>
                     </button>
 
-                    {/* 3. Admin Console */}
                     <button
                       onClick={() => openAuthWithRole('admin')}
-                      className="w-full flex items-start space-x-2.5 p-2.5 rounded-2xl hover:bg-purple-50 dark:hover:bg-purple-950/40 text-left transition-colors cursor-pointer group"
+                      className="w-full flex items-center space-x-2.5 p-2 rounded-xl hover:bg-purple-50 dark:hover:bg-purple-950/40 text-left transition-colors cursor-pointer"
                     >
-                      <div className="p-2 rounded-xl bg-purple-100 dark:bg-purple-950 text-purple-600 shrink-0">
-                        <ShieldCheck className="w-4 h-4" />
-                      </div>
+                      <ShieldCheck className="w-4 h-4 text-purple-600" />
                       <div>
-                        <div className="text-xs font-bold text-gray-900 dark:text-white group-hover:text-purple-600">
-                          Master Admin Console
-                        </div>
-                        <div className="text-[10px] text-gray-400">
-                          Verify listings, RERA audit & system
-                        </div>
+                        <div className="text-xs font-bold text-gray-900 dark:text-white">Admin Console</div>
+                        <div className="text-[10px] text-gray-400">Approvals & Operations</div>
                       </div>
                     </button>
                   </div>
@@ -522,18 +429,18 @@ export default function Navbar({ onOpenSearch, onOpenPostProperty }: NavbarProps
               {/* Post Free Property CTA */}
               <button
                 onClick={onOpenPostProperty}
-                className="hidden sm:inline-flex items-center space-x-1.5 px-3.5 py-2 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-500 hover:from-emerald-500 hover:to-teal-400 text-white text-xs font-bold shadow-md shadow-emerald-600/20 active:scale-95 transition-all cursor-pointer shrink-0"
+                className="hidden sm:inline-flex items-center space-x-1 px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold shadow-sm active:scale-95 transition-all cursor-pointer whitespace-nowrap shrink-0"
               >
-                <PlusCircle className="w-3.5 h-3.5" />
-                <span>Post Free Listing</span>
+                <Plus className="w-3.5 h-3.5" />
+                <span>Post</span>
               </button>
 
               {/* Mobile Hamburger */}
               <button
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                className="lg:hidden p-2 rounded-xl text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800"
+                className="lg:hidden p-1.5 rounded-lg text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800"
               >
-                {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+                {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
               </button>
             </div>
           </div>
@@ -541,26 +448,26 @@ export default function Navbar({ onOpenSearch, onOpenPostProperty }: NavbarProps
 
         {/* Mobile Navigation Drawer */}
         {mobileMenuOpen && (
-          <div className="lg:hidden bg-white/95 dark:bg-gray-900/95 backdrop-blur-xl border-b border-gray-200 dark:border-gray-800 px-4 pt-3 pb-6 mt-2 space-y-3 animate-in slide-in-from-top-4 duration-200">
+          <div className="lg:hidden bg-white/95 dark:bg-gray-900/95 backdrop-blur-xl border-b border-gray-200 dark:border-gray-800 px-4 pt-3 pb-6 space-y-3 animate-in slide-in-from-top-4 duration-200">
             {/* Quick Portals Row */}
             <div className="grid grid-cols-3 gap-2 pb-2 border-b border-gray-100 dark:border-gray-800 text-center">
               <button
                 onClick={() => openAuthWithRole('user')}
                 className="p-2 rounded-xl bg-emerald-50 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300 text-xs font-bold"
               >
-                👤 Buyer
+                Buyer
               </button>
               <button
                 onClick={() => openAuthWithRole('agent')}
                 className="p-2 rounded-xl bg-teal-50 dark:bg-teal-950/60 text-teal-800 dark:text-teal-300 text-xs font-bold"
               >
-                🏢 Broker
+                Broker
               </button>
               <button
                 onClick={() => openAuthWithRole('admin')}
                 className="p-2 rounded-xl bg-purple-50 dark:bg-purple-950/60 text-purple-800 dark:text-purple-300 text-xs font-bold"
               >
-                🛡️ Admin
+                Admin
               </button>
             </div>
 
@@ -570,28 +477,25 @@ export default function Navbar({ onOpenSearch, onOpenPostProperty }: NavbarProps
                 Home
               </Link>
               <Link href="/listing" onClick={() => setMobileMenuOpen(false)} className="p-2 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-800">
-                Listings
+                Properties
               </Link>
               <Link href="/invest-properties" onClick={() => setMobileMenuOpen(false)} className="p-2 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-800 text-emerald-600">
-                Invest Hub (9%+)
+                Invest
               </Link>
               <Link href="/calculators" onClick={() => setMobileMenuOpen(false)} className="p-2 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-800">
                 Calculators
               </Link>
               <Link href="/agents" onClick={() => setMobileMenuOpen(false)} className="p-2 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-800">
-                Verified Agents
+                Agents
               </Link>
               <Link href="/reviews" onClick={() => setMobileMenuOpen(false)} className="p-2 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-800">
-                4.9★ Reviews
+                Reviews
               </Link>
               <Link href="/plans" onClick={() => setMobileMenuOpen(false)} className="p-2 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-800">
-                Pricing Plans
+                Pricing
               </Link>
               <Link href="/policy" onClick={() => setMobileMenuOpen(false)} className="p-2 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-800">
-                Policy & Legal
-              </Link>
-              <Link href="/contact" onClick={() => setMobileMenuOpen(false)} className="p-2 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-800">
-                Contact HQ
+                Policies
               </Link>
             </div>
 
@@ -601,10 +505,10 @@ export default function Navbar({ onOpenSearch, onOpenPostProperty }: NavbarProps
                   setMobileMenuOpen(false);
                   if (onOpenPostProperty) onOpenPostProperty();
                 }}
-                className="w-full py-3 rounded-2xl bg-emerald-600 text-white text-xs font-bold shadow-md flex items-center justify-center space-x-1.5"
+                className="w-full py-2.5 rounded-xl bg-emerald-600 text-white text-xs font-bold shadow-md flex items-center justify-center space-x-1"
               >
-                <PlusCircle className="w-4 h-4" />
-                <span>Post Free Property Listing</span>
+                <Plus className="w-4 h-4" />
+                <span>Post Property</span>
               </button>
             </div>
           </div>
@@ -612,7 +516,7 @@ export default function Navbar({ onOpenSearch, onOpenPostProperty }: NavbarProps
       </header>
 
       {/* Spacer to prevent navbar cover */}
-      <div className="h-18" />
+      <div className="h-16" />
 
       {/* Auth Modal */}
       <AuthModal
