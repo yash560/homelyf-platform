@@ -252,8 +252,19 @@ export default function Footer() {
             <span>RERA Compliant Framework</span>
           </div>
         </div>
-        <div className="text-center sm:text-right">
-          © {new Date().getFullYear()} Homelyf Solutions Private Limited. All Rights Reserved. Custom Domain: <span className="text-emerald-400 font-mono">homelyf.thewebvale.com</span>
+        <div className="text-center sm:text-right text-xs space-y-1">
+          <div>© {new Date().getFullYear()} Homelyf Solutions Private Limited. All Rights Reserved.</div>
+          <div className="text-gray-400">
+            Architected & Shipped by{" "}
+            <a
+              href="https://www.thewebvale.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-emerald-400 hover:text-emerald-300 font-medium underline underline-offset-2 transition-colors"
+            >
+              TheWebVale Studio
+            </a>
+          </div>
         </div>
       </div>
     </footer>
